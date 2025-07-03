@@ -32,26 +32,19 @@ export default function HomePage() {
   }
 
   useEffect(() => {
+    // Set up intersection observer for scroll animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setVisibleSections((prev) => new Set([...prev, entry.target.id]))
-          } else {
-            setVisibleSections((prev) => {
-              const newSet = new Set(prev)
-              newSet.delete(entry.target.id)
-              return newSet
-            })
           }
         })
       },
-      { 
-        threshold: 0.15, 
-        rootMargin: "-10px" 
-      },
+      { threshold: 0.2, rootMargin: "-50px" },
     )
 
+    // Observe all sections
     Object.values(sectionRefs).forEach((ref) => {
       if (ref.current) {
         observer.observe(ref.current)

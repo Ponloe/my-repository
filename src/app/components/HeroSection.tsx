@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { Play, Pause, Volume2, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import ScrollIndicator from "./ScrollIndicator"
-import { RefObject, useState, useEffect } from "react"
+import { RefObject, useState, useEffect, useMemo } from "react"
 
 interface HeroSectionProps {
   isLoaded: boolean
@@ -13,8 +13,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({ 
   isLoaded, 
-  isPlaying, 
-  setIsPlaying, 
   scrollToSection, 
   sectionRef 
 }: HeroSectionProps) {
@@ -23,7 +21,7 @@ export default function HeroSection({
   const [displayText, setDisplayText] = useState("")
   const [isTyping, setIsTyping] = useState(true)
 
-  const commands = [
+  const commands = useMemo(() => [
     "npm run dev",
     "git add .",
     "git commit -m 'feat: wow this guy so handsome'",
@@ -32,7 +30,7 @@ export default function HeroSection({
     "docker build -t portfolio .",
     "git push origin main",
     "npm run deploy"
-  ]
+  ], [])
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
@@ -140,7 +138,7 @@ export default function HeroSection({
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            Let's get started
+            Let&apos;s get started
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

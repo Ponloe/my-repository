@@ -1,5 +1,4 @@
 import { Award } from "lucide-react"
-import SectionHeader from "./SectionHeader"
 import { RefObject } from "react"
 
 interface EducationSectionProps {

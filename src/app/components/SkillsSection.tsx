@@ -1,11 +1,10 @@
 import SectionHeader from "./SectionHeader"
-import { RefObject, useState, useEffect, useRef } from "react"
+import { RefObject, useState, useEffect, useRef, useMemo } from "react"
 import { 
   Code2, 
   Database, 
   Brackets, 
   FileCode, 
-  Layers, 
   Braces,
   AtSign,
   Atom,
@@ -23,6 +22,14 @@ import {
 interface SkillsSectionProps {
   isVisible: boolean
   sectionRef: RefObject<HTMLDivElement | null>
+}
+
+interface Skill {
+  name: string
+  level: number
+  color: string
+  particleType: string
+  syntax: string
 }
 
 export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionProps) {
@@ -56,7 +63,7 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
   }
 
   // Define skill relationships for constellation connections
-  const skillConnections = {
+  const skillConnections = useMemo(() => ({
     "React": ["NextJS", "TypeScript", "JavaScript"],
     "NextJS": ["React", "TypeScript", "JavaScript"],
     "TypeScript": ["JavaScript", "React", "NextJS", "NestJS"],
@@ -72,9 +79,9 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
     "Bootstrap": ["CSS", "JavaScript"],
     "Git": ["GitHub"],
     "GitHub": ["Git"]
-  }
+  }), [])
 
-  const skillGroups = [
+  const skillGroups = useMemo(() => [
     {
       category: "Programming Languages",
       skills: [
@@ -110,7 +117,7 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
       ],
       delay: 400,
     },
-  ]
+  ], [])
 
   // Calculate skill positions for constellation effect
   useEffect(() => {
@@ -139,7 +146,7 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
       window.addEventListener('resize', updatePositions)
       return () => window.removeEventListener('resize', updatePositions)
     }
-  }, [isVisible])
+  }, [isVisible, sectionRef])
 
   // Typing animation effect
   useEffect(() => {
@@ -168,10 +175,10 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
         }, 50)
       }, delay)
     })
-  }, [isVisible])
+  }, [isVisible, skillGroups])
 
   // Get progress bar shape based on skill type
-  const getProgressBarShape = (skill: any) => {
+  const getProgressBarShape = (skill: Skill) => {
     const shapes = {
       cpp: "linear-gradient(45deg, transparent 45%, currentColor 45%, currentColor 55%, transparent 55%)",
       python: "repeating-linear-gradient(45deg, transparent, transparent 2px, currentColor 2px, currentColor 4px)",
@@ -319,7 +326,7 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
         <ConstellationLines />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-20">
-          {skillGroups.map((group, groupIndex) => (
+          {skillGroups.map((group) => (
             <div
               key={group.category}
               className={`space-y-6 transition-all duration-1000 ease-out ${

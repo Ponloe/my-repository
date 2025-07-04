@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 
 interface LoadingScreenProps {
   isLoaded: boolean
@@ -11,7 +11,7 @@ export default function LoadingScreen({ isLoaded, onLoadComplete }: LoadingScree
   const [currentHello, setCurrentHello] = useState(0)
   const [showInitials, setShowInitials] = useState(false)
 
-  const hellos = [
+  const hellos = useMemo(() => [
     { text: "Hello", lang: "English" },
     { text: "Bonjour", lang: "French" },
     { text: "Hola", lang: "Spanish" },
@@ -26,7 +26,7 @@ export default function LoadingScreen({ isLoaded, onLoadComplete }: LoadingScree
     { text: "Sawadee", lang: "Thai" },
     { text: "Chào", lang: "Vietnamese" },
     { text: "សួស្តី", lang: "Khmer" },
-  ]
+  ], [])
 
   useEffect(() => {
     const helloInterval = setInterval(() => {
@@ -47,8 +47,8 @@ export default function LoadingScreen({ isLoaded, onLoadComplete }: LoadingScree
     }, 150)
 
     return () => clearInterval(helloInterval)
-  }, [onLoadComplete])
-
+  }, [onLoadComplete, hellos.length])
+  
   return (
     <div
       className={`fixed inset-0 bg-black z-[100] transition-all duration-1000 ease-out ${

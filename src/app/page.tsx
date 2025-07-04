@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import Navbar from "./components/navbar"
 import LoadingScreen from "./components/LoadingScreen"
 import HeroSection from "./components/HeroSection"
@@ -21,15 +21,23 @@ export default function HomePage() {
 
   const { repos, loading: reposLoading, error: reposError } = useGitHubRepos("Ponloe")
 
-  const sectionRefs = {
-    hero: useRef<HTMLDivElement>(null),
-    about: useRef<HTMLDivElement>(null),
-    skills: useRef<HTMLDivElement>(null),
-    experience: useRef<HTMLDivElement>(null),
-    work: useRef<HTMLDivElement>(null),
-    education: useRef<HTMLDivElement>(null),
-    contact: useRef<HTMLDivElement>(null),
-  }
+  const heroRef = useRef<HTMLDivElement>(null)
+  const aboutRef = useRef<HTMLDivElement>(null)
+  const skillsRef = useRef<HTMLDivElement>(null)
+  const experienceRef = useRef<HTMLDivElement>(null)
+  const workRef = useRef<HTMLDivElement>(null)
+  const educationRef = useRef<HTMLDivElement>(null)
+  const contactRef = useRef<HTMLDivElement>(null)
+
+  const sectionRefs = useMemo(() => ({
+    hero: heroRef,
+    about: aboutRef,
+    skills: skillsRef,
+    experience: experienceRef,
+    work: workRef,
+    education: educationRef,
+    contact: contactRef,
+  }), [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -61,7 +69,7 @@ export default function HomePage() {
     return () => {
       observer.disconnect()
     }
-  }, [])
+  }, [sectionRefs])
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -82,10 +90,10 @@ export default function HomePage() {
       <main className="pt-20">
         <HeroSection
           isLoaded={isLoaded}
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
           scrollToSection={scrollToSection}
           sectionRef={sectionRefs.hero}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
         />
         
         <AboutSection

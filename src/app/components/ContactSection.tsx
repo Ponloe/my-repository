@@ -136,7 +136,7 @@ export default function ContactSection({ isVisible, sectionRef }: ContactSection
           <div className="bg-gradient-to-r from-yellow-400/10 to-yellow-400/5 border border-yellow-400/20 rounded-lg p-8">
             <h3 className="text-2xl font-bold mb-4">Ready to Start a Project?</h3>
             <p className="text-gray-300 mb-6">
-              I'm currently available for new opportunities and exciting projects. Let's discuss how we can work together.
+              I&apos;m currently available for new opportunities and exciting projects. Let&apos;s discuss how we can work together.
             </p>
             <a
               href="mailto:sovannsoponloe@gmail.com?subject=Let's%20Work%20Together"

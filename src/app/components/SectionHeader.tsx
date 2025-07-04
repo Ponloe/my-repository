@@ -1,5 +1,3 @@
-import { RefObject } from "react"
-
 interface SectionHeaderProps {
   subtitle: string
   title: string

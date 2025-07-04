@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Play, Pause, Volume2, ArrowRight } from "lucide-react"
 import ScrollIndicator from "./ScrollIndicator"
-import { RefObject } from "react"
+import { RefObject, useState, useEffect } from "react"
 
 interface HeroSectionProps {
   isLoaded: boolean
@@ -18,6 +18,47 @@ export default function HeroSection({
   scrollToSection, 
   sectionRef 
 }: HeroSectionProps) {
+
+  const [currentCommandIndex, setCurrentCommandIndex] = useState(0)
+  const [displayText, setDisplayText] = useState("")
+  const [isTyping, setIsTyping] = useState(true)
+
+  const commands = [
+    "npm run dev",
+    "git add .",
+    "git commit -m 'feat: wow this guy so handsome'",
+    "npm run build",
+    "npm test -- --coverage",
+    "docker build -t portfolio .",
+    "git push origin main",
+    "npm run deploy"
+  ]
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+    
+    if (isTyping) {
+      const currentCommand = commands[currentCommandIndex]
+      if (displayText.length < currentCommand.length) {
+        timeout = setTimeout(() => {
+          setDisplayText(currentCommand.slice(0, displayText.length + 1))
+        }, 100)
+      } else {
+        setTimeout(() => {
+          setIsTyping(false)
+        }, 1500)
+      }
+    } else {
+      timeout = setTimeout(() => {
+        setDisplayText("")
+        setCurrentCommandIndex((prev) => (prev + 1) % commands.length)
+        setIsTyping(true)
+      }, 500)
+    }
+
+    return () => clearTimeout(timeout)
+  }, [currentCommandIndex, displayText, isTyping, commands])
+
   return (
     <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center">
       <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
@@ -29,7 +70,7 @@ export default function HeroSection({
                 isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
               }`}
             >
-              — HELLO, I AM Ponloe
+              — HELLO, I AM SoPonloe
             </p>
             <h1 className="text-5xl lg:text-7xl font-bold leading-tight overflow-hidden">
               <span
@@ -49,29 +90,47 @@ export default function HeroSection({
             </h1>
           </div>
 
-          <p
-            className={`text-gray-300 text-lg max-w-md leading-relaxed transition-all duration-800 ease-out delay-1000 ${
-              isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
-            Let's Code.
-          </p>
-
           <div
-            className={`flex items-center space-x-4 pt-4 transition-all duration-800 ease-out delay-1200 ${
+            className={`transition-all duration-800 ease-out delay-1000 ${
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            <button
-              onClick={() => setIsPlaying(!isPlaying)}
-              className="flex items-center justify-center w-12 h-12 bg-yellow-400 text-black rounded-full hover:bg-yellow-300 transition-colors transform hover:scale-105"
-            >
-              {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-1" />}
-            </button>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-0.5 bg-yellow-400"></div>
-              <Volume2 className="w-4 h-4 text-gray-400" />
-              <div className="w-8 h-0.5 bg-gray-600"></div>
+            <div className="p-4 bg-gray-900 border border-gray-700 rounded-lg font-mono text-sm shadow-2xl">
+              {/* Terminal Header */}
+              <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-700">
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1">
+                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-400 text-xs ml-2">Terminal</span>
+                </div>
+                <div className="text-gray-500 text-xs">zsh</div>
+              </div>
+              
+              {/* Command Line */}
+                <div className="space-y-2">
+                  
+                  {/* Current command with input on same line */}
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1">
+                      <span className="text-cyan-400 font-semibold">➜</span>
+                      <span className="text-blue-400 font-semibold">portfolio</span>
+                      <span className="text-yellow-400 font-semibold">git:(</span>
+                      <span className="text-red-400 font-semibold">main</span>
+                      <span className="text-yellow-400 font-semibold">)</span>
+                    </div>
+                    
+                    {/* Command input on same line */}
+                    <div className="flex items-center min-h-[20px]">
+                      <span className="text-white font-mono">
+                        {displayText}
+                      </span>
+                      <span className="text-green-400 animate-pulse font-bold ml-1">▊</span>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
 
@@ -81,7 +140,7 @@ export default function HeroSection({
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            Discover More
+            Let's get started
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

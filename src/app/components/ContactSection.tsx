@@ -36,7 +36,7 @@ export default function ContactSection({ isVisible, sectionRef }: ContactSection
           subtitle="GET IN TOUCH"
           title="LET'S CONNECT"
           highlightedWord="CONNECT"
-          description="Have a project in mind or want to collaborate? I'd love to hear from you. Let's create something amazing together."
+          description="Here's how you can reach me."
           isVisible={isVisible}
         />
 
@@ -99,10 +99,10 @@ export default function ContactSection({ isVisible, sectionRef }: ContactSection
               </div>
 
               {/* Quick Contact */}
-              <div className="bg-gray-800/50 rounded-lg p-6">
+              {/* <div className="bg-gray-800/50 rounded-lg p-6">
                 <h4 className="text-xl font-bold mb-4">Quick Contact</h4>
                 <p className="text-gray-400 mb-4">
-                  Prefer to reach out directly? Choose your preferred method:
+                  More more more
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a
@@ -122,7 +122,7 @@ export default function ContactSection({ isVisible, sectionRef }: ContactSection
                     <span>Telegram</span>
                   </a>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -136,14 +136,14 @@ export default function ContactSection({ isVisible, sectionRef }: ContactSection
           <div className="bg-gradient-to-r from-yellow-400/10 to-yellow-400/5 border border-yellow-400/20 rounded-lg p-8">
             <h3 className="text-2xl font-bold mb-4">Ready to Start a Project?</h3>
             <p className="text-gray-300 mb-6">
-              I&apos;m currently available for new opportunities and exciting projects. Let&apos;s discuss how we can work together.
+              Always open to new ideas. Let&apos;s discuss how we can work together.
             </p>
             <a
               href="mailto:sovannsoponloe@gmail.com?subject=Let's%20Work%20Together"
               className="inline-flex items-center space-x-2 bg-yellow-400 text-black px-8 py-3 rounded-lg hover:bg-yellow-300 transition-colors font-medium"
             >
               <Mail className="w-5 h-5" />
-              <span>Start a Conversation</span>
+              <span>Contact me</span>
             </a>
           </div>
         </div>

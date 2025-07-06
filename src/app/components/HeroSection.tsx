@@ -87,50 +87,44 @@ export default function HeroSection({
               </span>
             </h1>
           </div>
-
-          <div
-            className={`transition-all duration-800 ease-out delay-1000 ${
-              isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
-            <div className="p-4 bg-gray-900 border border-gray-700 rounded-lg font-mono text-sm shadow-2xl">
+          
+            <div className="p-3 sm:p-4 bg-gray-900 border border-gray-700 rounded-lg font-mono text-xs sm:text-sm shadow-2xl">
               {/* Terminal Header */}
-              <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-700">
+              <div className="flex items-center justify-between mb-2 sm:mb-3 pb-2 border-b border-gray-700">
                 <div className="flex items-center space-x-2">
                   <div className="flex space-x-1">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-red-500 rounded-full"></div>
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-500 rounded-full"></div>
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full"></div>
                   </div>
-                  <span className="text-gray-400 text-xs ml-2">Terminal</span>
+                  <span className="text-gray-400 text-xs ml-2 hidden sm:inline">Terminal</span>
                 </div>
-                <div className="text-gray-500 text-xs">zsh</div>
+                <div className="text-gray-500 text-xs hidden sm:inline">zsh</div>
               </div>
               
               {/* Command Line */}
-                <div className="space-y-2">
+              <div className="space-y-2">
+                {/* Current command with input on same line */}
+                <div className="flex items-start sm:items-center space-x-1 sm:space-x-2 min-h-[20px]">
+                  <div className="flex items-center space-x-1 flex-shrink-0 text-xs">
+                    <span className="text-cyan-400 font-semibold">➜</span>
+                    <span className="text-blue-400 font-semibold hidden sm:inline">portfolio</span>
+                    <span className="text-blue-400 font-semibold sm:hidden">~</span>
+                    <span className="text-yellow-400 font-semibold hidden sm:inline">git:(</span>
+                    <span className="text-red-400 font-semibold hidden sm:inline">main</span>
+                    <span className="text-yellow-400 font-semibold hidden sm:inline">)</span>
+                  </div>
                   
-                  {/* Current command with input on same line */}
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-1">
-                      <span className="text-cyan-400 font-semibold">➜</span>
-                      <span className="text-blue-400 font-semibold">portfolio</span>
-                      <span className="text-yellow-400 font-semibold">git:(</span>
-                      <span className="text-red-400 font-semibold">main</span>
-                      <span className="text-yellow-400 font-semibold">)</span>
-                    </div>
-                    
-                    {/* Command input on same line */}
-                    <div className="flex items-center min-h-[20px]">
-                      <span className="text-white font-mono">
-                        {displayText}
-                      </span>
-                      <span className="text-green-400 animate-pulse font-bold ml-1">▊</span>
-                    </div>
+                  {/* Command input that adapts to screen size */}
+                  <div className="flex items-center min-h-[20px] flex-1 min-w-0">
+                    <span className="text-white font-mono break-all">
+                      {displayText}
+                    </span>
+                    <span className="text-green-400 animate-pulse font-bold ml-1 flex-shrink-0">▊</span>
                   </div>
                 </div>
+              </div>
             </div>
-          </div>
 
           <button
             onClick={() => scrollToSection("about")}

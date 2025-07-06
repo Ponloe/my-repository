@@ -88,7 +88,7 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
         { name: "C++", level: 85, color: "#00599C", particleType: "hexagon", syntax: "cpp" },
         { name: "Python", level: 90, color: "#3776AB", particleType: "snake", syntax: "python" },
         { name: "Java", level: 80, color: "#ED8B00", particleType: "circle", syntax: "java" },
-        { name: "JavaScript", level: 95, color: "#F7DF1E", particleType: "square", syntax: "javascript" },
+        { name: "JavaScript", level: 85, color: "#F7DF1E", particleType: "square", syntax: "javascript" },
         { name: "TypeScript", level: 90, color: "#3178C6", particleType: "triangle", syntax: "typescript" },
         { name: "PHP", level: 75, color: "#777BB4", particleType: "diamond", syntax: "php" },
         { name: "SQL", level: 85, color: "#4479A1", particleType: "database", syntax: "sql" }
@@ -149,16 +149,27 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
   }, [isVisible, sectionRef])
 
   // Typing animation effect
+  // Enhanced typing animation effect with cycling
   useEffect(() => {
     if (!isVisible) return
 
     const allSkills = skillGroups.flatMap(group => group.skills)
+    const intervals: NodeJS.Timeout[] = []
     
-    allSkills.forEach((skill, index) => {
-      const delay = index * 150 + 500
+    const startTypingCycle = (skill: Skill, index: number) => {
+      const initialDelay = index * 150 + 500
       
-      setTimeout(() => {
+      const typeSkill = () => {
         let currentIndex = 0
+        
+        setTypingStates(prev => ({
+          ...prev,
+          [skill.name]: {
+            displayText: '',
+            isComplete: false
+          }
+        }))
+        
         const typingInterval = setInterval(() => {
           if (currentIndex <= skill.name.length) {
             setTypingStates(prev => ({
@@ -173,8 +184,24 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
             clearInterval(typingInterval)
           }
         }, 50)
-      }, delay)
+      }
+      
+      setTimeout(typeSkill, initialDelay)
+      
+      const cycleInterval = setInterval(() => {
+        typeSkill()
+      }, 5000 + (index * 100)) 
+      
+      intervals.push(cycleInterval)
+    }
+    
+    allSkills.forEach((skill, index) => {
+      startTypingCycle(skill, index)
     })
+    
+    return () => {
+      intervals.forEach(interval => clearInterval(interval))
+    }
   }, [isVisible, skillGroups])
 
   // Get progress bar shape based on skill type
@@ -398,17 +425,50 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
                         <span className="text-yellow-400 text-sm font-semibold">{skill.level}%</span>
                       </div>
                       
-                      {/* Morphing progress bar */}
+                       {/* Morphing progress bar */}
                       <div className="w-full bg-gray-700/50 rounded-full h-3 overflow-hidden relative">
                         <div 
-                          className="h-full transition-all duration-1000 ease-out"
+                          className="h-full transition-all duration-1000 ease-out relative"
                           style={{ 
                             width: isVisible ? `${skill.level}%` : '0%',
-                            background: getProgressBarShape(skill),
-                            color: skill.color,
+                            background: `linear-gradient(90deg, ${skill.color} 0%, ${skill.color}CC 100%)`,
                             transitionDelay: `${group.delay + skillIndex * 100 + 300}ms`
                           }}
-                        />
+                        >
+                          {/* Progress bar pattern overlay */}
+                          <div 
+                            className="absolute inset-0 opacity-30"
+                            style={{
+                              background: getProgressBarShape(skill),
+                              color: skill.color
+                            }}
+                          />
+                          
+                          {/* Progress glow effect */}
+                          <div 
+                            className="absolute inset-0 rounded-full opacity-50"
+                            style={{
+                              background: `linear-gradient(90deg, transparent 0%, ${skill.color}40 50%, transparent 100%)`,
+                              animation: 'progress-glow 2s ease-in-out infinite'
+                            }}
+                          />
+                        </div>
+                        
+                        {/* Progress percentage indicator */}
+                        <div 
+                          className="absolute top-0 h-full flex items-center transition-all duration-1000 ease-out"
+                          style={{ 
+                            left: isVisible ? `${Math.max(0, skill.level - 8)}%` : '0%',
+                            transitionDelay: `${group.delay + skillIndex * 100 + 500}ms`
+                          }}
+                        >
+                          <div 
+                            className="w-1 h-4 rounded-full opacity-80"
+                            style={{ backgroundColor: skill.color }}
+                          />
+                        </div>
+                        
+                        {/* Syntax indicators */}
                         <div className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-mono text-gray-400">
                           {skill.syntax === 'javascript' && '{;}'}
                           {skill.syntax === 'python' && ':'}
@@ -416,6 +476,17 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
                           {skill.syntax === 'cpp' && '};'}
                           {skill.syntax === 'php' && '?>'}
                           {skill.syntax === 'sql' && ';'}
+                        </div>
+                        
+                        {/* Progress milestone markers */}
+                        <div className="absolute inset-0 flex items-center">
+                          {[25, 50, 75].map(milestone => (
+                            <div
+                              key={milestone}
+                              className="w-px h-2 bg-gray-600 opacity-50"
+                              style={{ marginLeft: `${milestone}%` }}
+                            />
+                          ))}
                         </div>
                       </div>
                       
@@ -483,6 +554,17 @@ export default function SkillsSection({ isVisible, sectionRef }: SkillsSectionPr
           100% {
             opacity: 1;
             transform: translateX(0) scale(1);
+          }
+        }
+        
+        @keyframes progress-glow {
+          0%, 100% { 
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          50% { 
+            transform: translateX(0%);
+            opacity: 1;
           }
         }
         

@@ -11,19 +11,19 @@ export default function AboutSection({ isVisible, sectionRef }: AboutSectionProp
   const features = [
     {
       icon: Code,
-      title: "Development Philosophy",
-      description: "I believe great code is clean and efficient. Every line has a purpose, every function tells a story.",
+      title: "Build Clean.",
+      description: "Build cleanly. Everyone's happy. Both you, your team and future you will thank you.",
       delay: 200
     },
     {
       icon: Users,
-      title: "Collaborative",
-      description: "Understanding team needs and collaborating effectively is at the core of my development process.",
+      title: "Collaborative.",
+      description: "Let's all learn Git together. Team collaboration is the key to all things needed to be done.",
       delay: 400
     },
     {
       icon: Zap,
-      title: "Innovation",
+      title: "Innovation.",
       description: "I stay at the forefront of technology trends, constantly experimenting with new tools and techniques to push creative boundaries.",
       delay: 600
     }
@@ -36,7 +36,7 @@ export default function AboutSection({ isVisible, sectionRef }: AboutSectionProp
           subtitle="ABOUT ME"
           title="PROBLEM SOLVER"
           highlightedWord="SOLVER"
-          description="I'm passionate about building applications that solve real-world problems, combining technical expertise with a focus on user experience."
+          description="Anything problems you throw at me, I'm ready to tackle it. Bring it on!"
           isVisible={isVisible}
         />
 

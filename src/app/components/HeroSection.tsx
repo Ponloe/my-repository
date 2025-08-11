@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react"
 import ScrollIndicator from "./ScrollIndicator"
 import { RefObject, useState, useEffect, useMemo } from "react"
 import SpotifyProfile from "./SpotifyProfile"
+import SpotifyCurrentlyPlaying from "./SpotifyCurrentlyPlaying"
 
 interface HeroSectionProps {
   isLoaded: boolean
@@ -87,9 +88,10 @@ export default function HeroSection({
                 DEVELOPER
               </span>
             </h1>
-            <div className="mt-6">
-          <SpotifyProfile />
-        </div>
+            <div className="mt-6 space-y-3">
+              <SpotifyProfile />
+              <SpotifyCurrentlyPlaying isLoaded={isLoaded} />
+            </div>
           </div>
           
             <div className="p-3 sm:p-4 bg-gray-900 border border-gray-700 rounded-lg font-mono text-xs sm:text-sm shadow-2xl">

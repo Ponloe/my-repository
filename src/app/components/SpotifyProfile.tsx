@@ -4,6 +4,11 @@ import { useSpotifyProfile } from "../hooks/useSpotifyProfile"
 export default function SpotifyProfile() {
   const { profile, loading, error, refetch } = useSpotifyProfile()
 
+  const handleLogout = async () => {
+    await fetch("/api/spotify/logout", { method: "POST" })
+    refetch() // This will trigger a re-fetch and show the connect button
+  }
+
   if (loading) return <div className="text-sm text-gray-400">Loading Spotify...</div>
   if (error) return <div className="text-sm text-red-500">{error}</div>
 
@@ -33,9 +38,14 @@ export default function SpotifyProfile() {
           Followers: {profile.followers?.total ?? 0} • {profile.product}
         </div>
       </div>
-      <button onClick={refetch} className="text-xs text-green-400 hover:underline">
-        Refresh
-      </button>
+      <div className="flex gap-2">
+        <button onClick={refetch} className="text-xs text-green-400 hover:underline">
+          Refresh
+        </button>
+        <button onClick={handleLogout} className="text-xs text-red-400 hover:underline">
+          Logout
+        </button>
+      </div>
     </div>
   )
 }

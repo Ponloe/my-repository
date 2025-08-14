@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { refreshAccessToken, SPOTIFY_API_BASE } from "../../../lib/spotify"
+import { refreshAccessToken } from "../../../lib/spotify"
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const cookieStore = await cookies()
   let accessToken = cookieStore.get("spotify_access_token")?.value
   const refreshToken = cookieStore.get("spotify_refresh_token")?.value
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
         sameSite: "lax",
         maxAge: tokenData.expires_in
       })
-    } catch (error) {
+    } catch {
       return NextResponse.json({ error: "Token refresh failed" }, { status: 401 })
     }
   }

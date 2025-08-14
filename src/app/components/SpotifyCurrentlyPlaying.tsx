@@ -1,7 +1,7 @@
 "use client"
 import { useSpotifyCurrentlyPlaying } from "../hooks/useSpotifyCurrentlyPlaying"
 import { Music, Pause, Play } from "lucide-react"
-
+import Image from "next/image"
 interface SpotifyCurrentlyPlayingProps {
   isLoaded?: boolean
 }
@@ -68,10 +68,14 @@ export default function SpotifyCurrentlyPlaying({ isLoaded = true }: SpotifyCurr
       {/* Album Art */}
       <div className="relative flex-shrink-0">
         {albumImage ? (
-          <img
+          <Image
             src={albumImage}
             alt={`${track.album.name} cover`}
+            width={40}
+            height={40}
             className="w-10 h-10 rounded-lg object-cover"
+            unoptimized
+            priority
           />
         ) : (
           <div className="flex items-center justify-center w-10 h-10 bg-gray-700 rounded-lg">

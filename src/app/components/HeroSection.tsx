@@ -2,7 +2,6 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import ScrollIndicator from "./ScrollIndicator"
 import { RefObject, useState, useEffect, useMemo } from "react"
-import SpotifyProfile from "./SpotifyProfile"
 import SpotifyCurrentlyPlaying from "./SpotifyCurrentlyPlaying"
 
 interface HeroSectionProps {

@@ -46,7 +46,7 @@ export function useSpotifyCurrentlyPlaying() {
         const data = await res.json()
         setCurrentlyPlaying(data)
       }
-    } catch (err) {
+    } catch {
       setError("Network error")
     } finally {
       setLoading(false)

@@ -39,7 +39,7 @@ export async function GET() {
             Authorization: `Bearer ${accessToken}`,
           },
         })
-      } catch (refreshError) {
+      } catch {
         return NextResponse.json({ error: "Token refresh failed" }, { status: 401 })
       }
     }

@@ -1,5 +1,6 @@
 "use client"
 import { useSpotifyProfile } from "../hooks/useSpotifyProfile"
+import Image from "next/image"
 
 export default function SpotifyProfile() {
   const { profile, loading, error, refetch } = useSpotifyProfile()
@@ -26,10 +27,14 @@ export default function SpotifyProfile() {
   return (
     <div className="flex items-center gap-3 text-sm">
       {profile.images?.[0]?.url && (
-        <img
+        <Image
           src={profile.images[0].url}
-            alt="Spotify Avatar"
-            className="w-8 h-8 rounded-full object-cover"
+          alt="Spotify Avatar"
+          width={32}
+          height={32}
+          className="w-8 h-8 rounded-full object-cover"
+          unoptimized
+          priority
         />
       )}
       <div>

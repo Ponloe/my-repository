@@ -52,3 +52,14 @@ export async function refreshAccessToken(refreshToken: string) {
   if (!res.ok) throw new Error("Refresh failed")
   return res.json() as Promise<{ access_token: string; expires_in: number }>
 }
+
+export async function getMyAccessToken(): Promise<string> {
+  const refreshToken = process.env.SPOTIFY_MY_REFRESH_TOKEN
+
+  if (!refreshToken) {
+    throw new Error('SPOTIFY_MY_REFRESH_TOKEN environment variable is required')
+  }
+
+  const response = await refreshAccessToken(refreshToken)
+  return response.access_token
+}

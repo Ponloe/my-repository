@@ -5,24 +5,9 @@ import Image from "next/image"
 export default function SpotifyProfile() {
   const { profile, loading, error, refetch } = useSpotifyProfile()
 
-  const handleLogout = async () => {
-    await fetch("/api/spotify/logout", { method: "POST" })
-    refetch() // This will trigger a re-fetch and show the connect button
-  }
-
   if (loading) return <div className="text-sm text-gray-400">Loading Spotify...</div>
   if (error) return <div className="text-sm text-red-500">{error}</div>
-
-  if (!profile) {
-    return (
-      <button
-        onClick={() => { window.location.href = "/api/spotify/login" }}
-        className="px-3 py-2 text-xs rounded bg-green-600 hover:bg-green-500 transition"
-      >
-        Connect Spotify
-      </button>
-    )
-  }
+  if (!profile) return null
 
   return (
     <div className="flex items-center gap-3 text-sm">
@@ -43,14 +28,9 @@ export default function SpotifyProfile() {
           Followers: {profile.followers?.total ?? 0} • {profile.product}
         </div>
       </div>
-      <div className="flex gap-2">
-        <button onClick={refetch} className="text-xs text-green-400 hover:underline">
-          Refresh
-        </button>
-        <button onClick={handleLogout} className="text-xs text-red-400 hover:underline">
-          Logout
-        </button>
-      </div>
+      <button onClick={refetch} className="text-xs text-green-400 hover:underline">
+        Refresh
+      </button>
     </div>
   )
 }

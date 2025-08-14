@@ -1,59 +1,30 @@
-import { NextRequest, NextResponse } from "next/server"
 import { exchangeCodeForTokens } from "../../../lib/spotify"
-import { cookies } from "next/headers"
+import { NextRequest } from "next/server"
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
+  const searchParams = request.nextUrl.searchParams
   const code = searchParams.get("code")
   const state = searchParams.get("state")
   const error = searchParams.get("error")
 
-  // Handle user denial
-  if (error === "access_denied") {
-    return NextResponse.redirect(new URL("/?spotify=denied", request.url))
+  if (error) {
+    return Response.redirect(new URL("/?error=access_denied", request.url))
   }
 
   if (!code || !state) {
-    return NextResponse.redirect(new URL("/?spotify=error", request.url))
-  }
-
-  // Verify state to prevent CSRF attacks
-  const cookieStore = await cookies()
-  const storedState = cookieStore.get("spotify_oauth_state")?.value
-  
-  if (state !== storedState) {
-    return NextResponse.redirect(new URL("/?spotify=invalid_state", request.url))
+    return Response.redirect(new URL("/?error=invalid_request", request.url))
   }
 
   try {
-    // Exchange code for tokens
-    const tokenData = await exchangeCodeForTokens(code)
+    const tokens = await exchangeCodeForTokens(code)
     
-    // Store tokens in secure HTTP-only cookies
-    const response = NextResponse.redirect(new URL("/?spotify=success", request.url))
+    // 🔥 TEMPORARILY LOG THE REFRESH TOKEN - REMOVE AFTER GETTING IT
+    console.log("🔑 YOUR REFRESH TOKEN:", tokens.refresh_token)
+    console.log("📋 Copy this to SPOTIFY_MY_REFRESH_TOKEN environment variable")
     
-    // Set access token (short-lived)
-    response.cookies.set("spotify_access_token", tokenData.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: tokenData.expires_in
-    })
-    
-    // Set refresh token (long-lived)
-    response.cookies.set("spotify_refresh_token", tokenData.refresh_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 30 // 30 days
-    })
-    
-    // Clear the state cookie
-    response.cookies.delete("spotify_oauth_state")
-    
-    return response
+    return Response.redirect(new URL("/?success=spotify_connected", request.url))
   } catch (error) {
     console.error("Token exchange failed:", error)
-    return NextResponse.redirect(new URL("/?spotify=token_error", request.url))
+    return Response.redirect(new URL("/?error=token_exchange_failed", request.url))
   }
 }

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 
 export interface SpotifyProfile {
   display_name: string
-  email: string
   images?: { url: string }[]
   id: string
   followers?: { total: number }
@@ -15,16 +14,23 @@ export function useSpotifyProfile() {
   const [error, setError] = useState<string | null>(null)
 
   const fetchProfile = async () => {
-    setLoading(true); setError(null)
-    const res = await fetch("/api/spotify/profile")
-    if (res.status === 401) {
-      setProfile(null)
-    } else if (!res.ok) {
-      setError("Failed to load Spotify profile")
-    } else {
-      setProfile(await res.json())
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const res = await fetch("/api/spotify/access")
+      
+      if (!res.ok) {
+        throw new Error("Failed to load Spotify profile")
+      }
+      
+      const data = await res.json()
+      setProfile(data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load Spotify profile")
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   useEffect(() => {

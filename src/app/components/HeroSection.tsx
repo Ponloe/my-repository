@@ -2,6 +2,8 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import ScrollIndicator from "./ScrollIndicator"
 import { RefObject, useState, useEffect, useMemo } from "react"
+import SpotifyProfile from "./SpotifyProfile"
+import SpotifyCurrentlyPlaying from "./SpotifyCurrentlyPlaying"
 
 interface HeroSectionProps {
   isLoaded: boolean
@@ -61,31 +63,29 @@ export default function HeroSection({
     <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center">
       <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Content */}
-        <div className="space-y-8 lg:pr-12">
-          <div className="space-y-2">
+                <div className="space-y-8 lg:pr-12">
+          <div className="space-y-4">
             <p
-              className={`text-yellow-400 text-sm font-medium tracking-wider uppercase transition-all duration-800 ease-out delay-400 ${
-                isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+              className={`text-xs uppercase tracking-widest text-gray-400 transition-opacity duration-700 ${
+                isLoaded ? "opacity-100" : "opacity-0"
               }`}
             >
-              — HELLO, I AM SoPonloe
+              Soponloe Sovann
             </p>
-            <h1 className="text-5xl lg:text-7xl font-bold leading-tight overflow-hidden">
-              <span
-                className={`block transition-all duration-1000 ease-out delay-600 ${
-                  isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"
-                }`}
-              >
-                <span className="text-yellow-400">FULL-STACK</span>
-              </span>
-              <span
-                className={`block transition-all duration-1000 ease-out delay-800 ${
-                  isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"
-                }`}
-              >
-                DEVELOPER
-              </span>
+
+            <h1
+              className={`text-5xl lg:text-7xl font-bold leading-tight transition-opacity duration-700 delay-100 ${
+                isLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              Software Engineer<span className="text-yellow-400">.</span>
             </h1>
+
+          </div>
+
+          <div className="mt-6 space-y-3">
+            {/* <SpotifyProfile /> */}
+            <SpotifyCurrentlyPlaying isLoaded={isLoaded} />
           </div>
           
             <div className="p-3 sm:p-4 bg-gray-900 border border-gray-700 rounded-lg font-mono text-xs sm:text-sm shadow-2xl">
